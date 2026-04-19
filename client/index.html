@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+  <title>Beach Games 2026</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- ===== HOME ===== -->
+<div id="screen-home" class="screen active">
+  <div class="home-bg">
+    <div class="sun-wrap"><div class="sun"></div><div class="sun-rays"></div></div>
+    <div class="clouds">
+      <div class="cloud c1"></div>
+      <div class="cloud c2"></div>
+      <div class="cloud c3"></div>
+    </div>
+    <div class="ocean-bg"></div>
+    <div class="waves">
+      <div class="wave w1"></div>
+      <div class="wave w2"></div>
+      <div class="wave w3"></div>
+    </div>
+    <div class="palm-wrap left"><div class="palm-trunk"></div><div class="palm-top">🌴</div></div>
+    <div class="palm-wrap right"><div class="palm-trunk"></div><div class="palm-top">🌴</div></div>
+    <div class="beach-sand"></div>
+  </div>
+  <div class="home-content">
+    <div class="logo-wrap">
+      <div class="logo-badge">🏖️ ARCADE ESPORTIVO</div>
+      <div class="logo-title">BEACH<br>GAMES</div>
+      <div class="logo-year">2026</div>
+      <div class="logo-sub">Corridas rápidas · Praia · Manobras · Amigos</div>
+    </div>
+    <div class="home-buttons">
+      <button class="btn btn-primary" onclick="showCharSelect('solo')">
+        <span class="btn-icon">🏖️</span> Jogar Solo
+      </button>
+      <button class="btn btn-secondary" onclick="showCreateRoom()">
+        <span class="btn-icon">🔗</span> Criar Sala Online
+      </button>
+      <button class="btn btn-outline" onclick="showJoinRoom()">
+        <span class="btn-icon">🎯</span> Entrar com Código
+      </button>
+      <button class="btn btn-ghost" onclick="showHowToPlay()">
+        <span class="btn-icon">❓</span> Como Jogar
+      </button>
+    </div>
+    <div class="home-footer">
+      <div id="home-best-score" class="best-score"></div>
+      <div class="connection-status" id="conn-status"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== HOW TO PLAY ===== -->
+<div id="screen-howtoplay" class="screen">
+  <div class="screen-header">
+    <button class="btn-back" onclick="showScreen('home')">← Voltar</button>
+    <h2>Como Jogar</h2>
+  </div>
+  <div class="howto-content">
+    <div class="howto-card"><div class="howto-icon">👆</div><div><strong>Toque / Espaço</strong><br>Pular obstáculos</div></div>
+    <div class="howto-card"><div class="howto-icon">👇</div><div><strong>Swipe ↓ / Seta ↓</strong><br>Abaixar</div></div>
+    <div class="howto-card"><div class="howto-icon">⬆️</div><div><strong>↑ em rampa</strong><br>Manobra aérea!</div></div>
+    <div class="howto-card"><div class="howto-icon">⭐</div><div><strong>Estrelas</strong><br>+50 pts cada</div></div>
+    <div class="howto-card"><div class="howto-icon">💥</div><div><strong>Obstáculos</strong><br>-1 vida ao bater</div></div>
+    <div class="howto-card"><div class="howto-icon">🏆</div><div><strong>Competição</strong><br>90 seg, até 9 rivais</div></div>
+    <div class="howto-card"><div class="howto-icon">🔥</div><div><strong>Combo</strong><br>Colete seguido!</div></div>
+    <div class="howto-card"><div class="howto-icon">🤖</div><div><strong>Bots</strong><br>Completam a sala</div></div>
+  </div>
+</div>
+
+<!-- ===== CHAR SELECT ===== -->
+<div id="screen-charselect" class="screen">
+  <div class="screen-header">
+    <button class="btn-back" id="charselect-back">← Voltar</button>
+    <h2>Escolha seu Personagem</h2>
+  </div>
+  <div class="char-grid" id="char-grid"></div>
+  <div class="char-confirm">
+    <button class="btn btn-primary" onclick="confirmCharacter()">Confirmar ✓</button>
+  </div>
+</div>
+
+<!-- ===== CREATE ROOM ===== -->
+<div id="screen-createroom" class="screen">
+  <div class="screen-header">
+    <button class="btn-back" onclick="showScreen('home')">← Voltar</button>
+    <h2>Criar Sala</h2>
+  </div>
+  <div class="room-content">
+    <div class="room-code-wrap">
+      <div class="room-code-label">Código da Sala</div>
+      <div class="room-code" id="room-code-display">——</div>
+      <div class="room-link" id="room-link-display">aguardando servidor...</div>
+      <button class="btn btn-outline copy-btn" onclick="copyInvite()">📋 Copiar Convite</button>
+    </div>
+    <div class="online-badge" id="online-badge">
+      <div class="online-dot"></div>
+      <span id="online-badge-text">Conectando...</span>
+    </div>
+    <div class="lobby-list" id="create-lobby-list"></div>
+    <div class="room-actions">
+      <button class="btn btn-primary" onclick="hostStartGame()">🚀 Começar Partida</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== JOIN ROOM ===== -->
+<div id="screen-joinroom" class="screen">
+  <div class="screen-header">
+    <button class="btn-back" onclick="showScreen('home')">← Voltar</button>
+    <h2>Entrar com Código</h2>
+  </div>
+  <div class="join-content">
+    <div class="join-illustration">🏖️</div>
+    <div class="join-form">
+      <label>Código da sala:</label>
+      <input type="text" id="join-code-input" placeholder="Ex: PRAIA82" maxlength="10"/>
+      <div class="join-name-row">
+        <input type="text" id="join-name-input" placeholder="Seu nome" maxlength="14"/>
+      </div>
+      <button class="btn btn-primary" onclick="joinRoom()">Entrar →</button>
+    </div>
+    <div id="join-feedback" class="join-feedback"></div>
+  </div>
+</div>
+
+<!-- ===== LOBBY ===== -->
+<div id="screen-lobby" class="screen">
+  <div class="screen-header">
+    <button class="btn-back" onclick="leaveRoom()">← Sair</button>
+    <h2>Sala: <span id="lobby-room-code">——</span></h2>
+  </div>
+  <div class="lobby-players" id="lobby-players-list"></div>
+  <div class="lobby-actions">
+    <div class="lobby-status" id="lobby-status">Aguardando jogadores...</div>
+    <button class="btn btn-primary" id="btn-start-lobby" onclick="hostStartGame()" style="display:none">🏁 Começar Partida</button>
+    <div class="lobby-waiting" id="lobby-waiting">Aguardando o host iniciar...</div>
+  </div>
+</div>
+
+<!-- ===== COUNTDOWN ===== -->
+<div id="screen-countdown" class="screen">
+  <div class="countdown-bg"></div>
+  <div class="countdown-content">
+    <div class="countdown-label">PREPARA...</div>
+    <div class="countdown-number" id="countdown-number">3</div>
+    <div class="countdown-players" id="countdown-players-preview"></div>
+  </div>
+</div>
+
+<!-- ===== GAME ===== -->
+<div id="screen-game" class="screen">
+  <div class="game-hud">
+    <div class="hud-left">
+      <div class="hud-score" id="hud-score">0</div>
+      <div class="hud-label">PONTOS</div>
+    </div>
+    <div class="hud-center">
+      <div class="hud-timer" id="hud-timer">90</div>
+      <div class="hud-label">SEG</div>
+    </div>
+    <div class="hud-right">
+      <div class="hud-rank" id="hud-rank">1º</div>
+      <div class="hud-label">LUGAR</div>
+    </div>
+  </div>
+  <div class="energy-bar-wrap">
+    <div class="energy-bar" id="energy-bar"></div>
+    <div class="energy-hearts" id="energy-hearts"></div>
+  </div>
+  <canvas id="game-canvas"></canvas>
+  <div class="game-mini-rank" id="game-mini-rank"></div>
+  <div class="game-message" id="game-message"></div>
+  <div class="game-controls">
+    <button class="ctrl-btn ctrl-duck" ontouchstart="handleDuck(true)" ontouchend="handleDuck(false)">⬇</button>
+    <button class="ctrl-btn ctrl-jump" ontouchstart="handleJump()" onclick="handleJump()">JUMP</button>
+    <button class="ctrl-btn ctrl-trick" ontouchstart="handleTrick()" onclick="handleTrick()">⬆</button>
+  </div>
+</div>
+
+<!-- ===== RESULT ===== -->
+<div id="screen-result" class="screen">
+  <div class="result-bg"></div>
+  <div class="result-inner">
+    <div class="result-header">
+      <div class="result-medal" id="result-medal">🏆</div>
+      <div class="result-title" id="result-title">Resultado Final</div>
+      <div class="result-subtitle" id="result-subtitle"></div>
+    </div>
+    <div class="podium-wrap" id="podium-wrap"></div>
+    <div class="result-full-rank" id="result-full-rank"></div>
+    <div class="result-stats" id="result-stats"></div>
+    <div class="result-actions">
+      <button class="btn btn-primary" onclick="playAgain()">🔄 Jogar Novamente</button>
+      <button class="btn btn-secondary" onclick="inviteFriends()">📲 Convidar Amigos</button>
+      <button class="btn btn-ghost" onclick="showScreen('home')">🏠 Menu Principal</button>
+    </div>
+  </div>
+</div>
+
+<!-- Socket.io — carregado do servidor em produção, fallback local -->
+<script>
+  // Se estiver rodando localmente sem servidor, cria um stub
+  window.SOCKET_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:3000'
+    : window.location.origin;
+</script>
+<script src="/socket.io/socket.io.js" onerror="window.SOCKET_UNAVAILABLE=true"></script>
+<script src="game.js"></script>
+</body>
+</html>
